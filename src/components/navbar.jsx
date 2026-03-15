@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext'
 
 const Navbar = () => {
     const [open, setOpen] = useState(false)
-    const {user , setUser  , setShowUserLogin , navigate , setSearchQuery , searchQuery} = useAppContext()
+    const {user , setUser  , setShowUserLogin , navigate , setSearchQuery , searchQuery , getCartCount} = useAppContext()
 
     const logout = async ()=>{
         setUser(null)
@@ -43,7 +43,7 @@ const Navbar = () => {
                     className="relative cursor-pointer"
                 >
                     <img src={assets.nav_cart_icon} alt="cart" className='w-4 opacity-80' />
-                    <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
+                    <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">{getCartCount()}</button>
                 </div>
                 
                 {!user ?(
