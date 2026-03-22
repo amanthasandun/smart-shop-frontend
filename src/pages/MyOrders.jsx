@@ -24,7 +24,7 @@ const MyOrders = () => {
         </div>
         {myOrders.map((order , index)=>(
             <div key={index} className='border border-gray-300 rounded-lg mb-10 p-4 py-5 max-w-4xl '>
-                <p className='flex justify-between md:items-center text-gray-400 md:font-medium max md:flex-row'>
+                <p className='flex flex-col md:flex-row justify-between md:items-center text-gray-400 md:font-medium'>
                     <span>Order Id : {order._id}</span>
                     <span>Payment : {order.paymentType}</span>
                     <span>Total Amount : {currency}{order.amount}</span>
@@ -44,7 +44,7 @@ const MyOrders = () => {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col justify-center md:ml-8 mb-4 mb:mb-0'>
+                            <div className='flex flex-col justify-center md:ml-8 mb-4 md:mb-0'>
                                 <p>Quantity :  {item.quantity || "1"}</p>
                                 <p>Status : {order.status }</p>
                                 <p>Date  : { new Date(order.createdAt).toLocaleDateString() }</p>
