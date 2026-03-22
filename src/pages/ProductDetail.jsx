@@ -30,7 +30,7 @@ const ProductDetail = () => {
             <p>
                 <Link to={"/"}>Home </Link > 
                 <Link to={"/products"}> Products </Link> 
-                <Link to={`/product/${product.category.toLowerCase()}`}> {product.category} </Link> 
+                <Link to={`/products/${product.category.toLowerCase()}`}> {product.category} </Link> 
                 <span className="text-primary"> {product.name}</span>
             </p>
 
@@ -93,7 +93,7 @@ const ProductDetail = () => {
 
                     <div className="grid grid-cols-3 md:grid-cols-5 gap-6 mt-7">
                         {
-                            relatedProducts.filter((product)=>product.isStock).map((product)=>{
+                            relatedProducts.filter((product)=>product.inStock).map((product)=>{
                                 return <ProductCart key={product._id} product={product}/>
                             })
                         }
