@@ -46,7 +46,7 @@ const Orders = () => {
 
                 <div className="flex flex-col gap-1 text-sm text-black/70 md:text-base md:items-end md:text-right">
                     <p>Method: {order.paymentType}</p>
-                    <p>Date: {new Date(order.createAt).toLocaleDateString()}</p>
+                    <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                     <p className={order.isPaid ? 'text-green-600 font-medium' : 'text-amber-600 font-medium'}>
                       Payment: {order.isPaid ? 'Paid' : 'Pending'}
                     </p>
