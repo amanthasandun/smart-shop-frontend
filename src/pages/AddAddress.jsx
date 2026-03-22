@@ -72,7 +72,7 @@ const AddAddress = () => {
                             <InputField handleChange={handleChange} address={address} name="country" type="text" placeHolder="Country"/>
                         </div>
                             <InputField handleChange={handleChange} address={address} name="phone" type="text" placeHolder="Phone"/>
-                        <button className='w-ful mt-6 bg-primary text-primary text-white py-3 hover:bg-primary-dull transition cursor-pointer uppercase'>
+                        <button className='w-full mt-6 bg-primary text-white py-3 hover:bg-primary-dull transition cursor-pointer uppercase'>
                             Save the address
                         </button>                            
                     </form>
