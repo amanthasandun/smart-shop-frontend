@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { assets, categories } from '../../assets/assets'
+import { useAppContext } from '../../context/AppContext'
+import toast from 'react-hot-toast'
 
 const AddProduct = () => {
 
@@ -10,8 +12,43 @@ const AddProduct = () => {
     const [price , setPrice] = useState("")
     const [offerPrice , setOfferPrice] = useState("")
 
+    const {axios} = useAppContext()
+
     const onSubmitHandler = async (event) => {
-        event.preventDefault()
+        try {
+            event.preventDefault()
+            const productData = {
+                name , 
+                description : description.split('\n') ,
+                category,
+                price , 
+                offerPrice
+            }
+            
+            const formData = new FormData()
+
+            formData.append('productData' , JSON.stringify(productData)) // This use to pass the objects and files to the backend 
+                                                                           // param1 : this is name of the string  , param2 : the object that convert to the string
+        
+            for(let i = 0 ; i < files.length ; i++){
+                formData.append("images" , files[i])
+            }
+
+            const {data} = await axios.post("/api/product/add" , formData)
+            if(data.success){
+                toast.success(data.message)
+                setFiles([])
+                setName('')
+                setDescription('')
+                setCategory('')
+                setPrice('')
+                setOfferPrice('')
+            }else{
+                console.log(data.message)
+            }
+        } catch (error) {                                              
+            console.log(error.message);
+        }
     }
 
 
@@ -77,7 +114,7 @@ const AddProduct = () => {
 
                 </div>
 
-                <button className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">ADD</button>
+                <button type="submit" className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">ADD</button>
             </form>
         </div>
 
