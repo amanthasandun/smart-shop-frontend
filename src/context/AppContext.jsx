@@ -2,6 +2,10 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { dummyProducts } from "../assets/assets";
 import toast from "react-hot-toast";
+import axios from "axios"
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 export const AppContext = createContext()
 
@@ -15,9 +19,27 @@ export const AppContextProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState({})
     const [searchQuery , setSearchQuery] = useState({})
 
+
+    // Fetch the seller status
+    const fetchSeller = async ()=>{
+        try {
+            const {data} = await axios.get("api/seller/is-auth")
+            if(data.success){
+                setIsSeller(true)
+            }else{
+                setIsSeller(false)
+            }
+        } catch (error) {
+            console.log(error.message);
+            setIsSeller(false)
+        }
+    }
+
+    // Fetch all products
     const fetchProducts = async () => {
         setProducts(dummyProducts)
     }
+
     // Add product to cart
     const addToCart = (itemId) => {
         let cartData = structuredClone(cartItems)
@@ -40,7 +62,6 @@ export const AppContextProvider = ({ children }) => {
     }
 
     // remove product from the cart
-
     const removeFromCart = (itemId) => {
         let cartData = structuredClone(cartItems)
         if (cartData[itemId]) {
@@ -63,7 +84,6 @@ export const AppContextProvider = ({ children }) => {
     }
 
     // Get cart total amount
-
     const getCartAmount =()=>{
         let totalAmount = 0 ;
         for(const items in cartItems){
@@ -78,10 +98,11 @@ export const AppContextProvider = ({ children }) => {
     // fetch all products 
     useEffect(() => {
         fetchProducts()
+        fetchSeller()
     }, [])
 
 
-    const value = { setSearchQuery , searchQuery , navigate , user, setUser, isSeller, setIsSeller, showUserLogin, setShowUserLogin, products, currency, addToCart, updateCartItem, removeFromCart, cartItems , getCartAmount , getCartCount}
+    const value = { setSearchQuery , searchQuery , navigate , user, setUser, isSeller, setIsSeller, showUserLogin, setShowUserLogin, products, currency, addToCart, updateCartItem, removeFromCart, cartItems , getCartAmount , getCartCount , axios}
 
     return (
         <AppContext.Provider value={value}>
