@@ -44,7 +44,7 @@ const Login = () => {
                     <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
                 </p>
 
-                {state === "register" && (
+                {state === "rejister" && (
                     <div className="w-full">
                         <p>Name</p>
                         <input onChange={(e) => setName(e.target.value)} value={name} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary" type="text" required />
@@ -61,13 +61,13 @@ const Login = () => {
                     <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary" type="password" required />
                 </div>
                 
-                {state === "register" ? (
+                {state === "rejister" ? (
                     <p>
                         Already have account? <span onClick={() => setState("login")} className="text-primary cursor-pointer">click here</span>
                     </p>
                 ) : (
                     <p>
-                        Create an account? <span onClick={() => setState("register")} className="text-primary cursor-pointer">click here</span>
+                        Create an account? <span onClick={() => setState("rejister")} className="text-primary cursor-pointer">click here</span>
                     </p>
                 )}
 
@@ -76,7 +76,7 @@ const Login = () => {
                     className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer"
                     type = "submit"
                     >
-                    {state === "register" ? "Create Account" : "Login"}
+                    {state === "rejister" ? "Create Account" : "Login"}
                 </button>
             </form>
         </div>
