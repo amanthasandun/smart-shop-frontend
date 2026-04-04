@@ -13,7 +13,9 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-        if (searchQuery.length > 0) { }
+        if (searchQuery.length > 0) { 
+
+        }
         navigate("/products")
     }
         , [searchQuery])
@@ -70,6 +72,7 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
+            
             <div className='flex items-center gap-6 sm:hidden'>
                 <div
                     onClick={() => {
