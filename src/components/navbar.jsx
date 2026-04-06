@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { assets } from '../assets/assets'
-import { useAppContext } from '../context/AppContext'
+import { useAppContext } from '../context/useAppContext'
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
     const [open, setOpen] = useState(false)
-    const { user, setUser, setShowUserLogin, navigate, setSearchQuery, searchQuery, getCartCount } = useAppContext()
+    const { user, setUser, setShowUserLogin, navigate, setSearchQuery, searchQuery, getCartCount , axios } = useAppContext()
 
     const logout = async () => {
-        setUser(null)
-        navigate("/")
+        try {
+            const {data} = await axios.get("/api/user/logout")
+            if(data.success){
+                toast.success(data.message)
+                setUser(null)
+                navigate("/") 
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     useEffect(() => {
         if (searchQuery.length > 0) { 
-
+            navigate("/products")
         }
-        navigate("/products")
     }
         , [searchQuery])
+
+    
     return (
         <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 

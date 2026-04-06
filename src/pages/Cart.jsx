@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppContext } from '../context/AppContext'
+import { useAppContext } from '../context/useAppContext'
 import { assets, dummyAddress } from "../assets/assets";
 
 
@@ -35,7 +35,9 @@ const Cart = () => {
 
     return products.length > 0 && cartItems ? (
         <div className="flex flex-col md:flex-row mt-6">
+            
             <div className='flex-1 max-w-4xl'>
+
                 <h1 className="text-3xl font-medium mb-6">
                     Shopping Cart <span className="text-sm text-primary">{getCartCount()}</span>
                 </h1>

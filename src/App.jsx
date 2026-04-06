@@ -4,7 +4,7 @@ import { Route, Router, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import { Toaster } from 'react-hot-toast'
 import Footer from './components/Footer.jsx'
-import { useAppContext } from './context/AppContext.jsx'
+import { useAppContext} from './context/useAppContext.jsx'
 import Login from './components/Login.jsx'
 import AllProducts from './pages/AllProducts.jsx'
 import ProductCatergory from './pages/ProductCatergory.jsx'
@@ -37,11 +37,13 @@ const App = () => {
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/add-address" element={<AddAddress/>}/>
           <Route path="/my-orders" element={<MyOrders/>}/>
+
           <Route path="/seller" element={isSeller ? <SellerLayout/> : <SellerLogin/>}>
             <Route index element={isSeller ? <AddProduct/> : null }/>
             <Route path="product-list" element={<ProductList/>}/>
             <Route path="orders" element={<Orders/>}/>      
           </Route>
+          
         </Routes>
       </div>
       {!isSellerPath && <Footer/>}
