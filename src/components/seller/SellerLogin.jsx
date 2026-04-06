@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useAppContext} from "../../context/AppContext"
+import { useAppContext} from "../../context/useAppContext"
 import toast from "react-hot-toast";
 
 const SellerLogin = () => {

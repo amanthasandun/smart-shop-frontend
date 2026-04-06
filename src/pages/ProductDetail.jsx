@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../context/useAppContext";
 import { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import ProductCart from "../components/ProductCart";
@@ -50,6 +50,7 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="text-sm w-full md:w-1/2">
+                
                     <h1 className="text-3xl font-medium">{product.name}</h1>
 
                     <div className="flex items-center gap-0.5 mt-1">
