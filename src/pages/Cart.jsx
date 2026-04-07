@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from '../context/useAppContext'
 import { assets, dummyAddress } from "../assets/assets";
+import toast from "react-hot-toast";
 
 
 const Cart = () => {
-    const {products , currency , cartItems , removeFromCart , getCartCount , updateCartItem , navigate , getCartAmount }=useAppContext()
+    const {user , axios , products , currency , cartItems , removeFromCart , getCartCount , updateCartItem , navigate , getCartAmount }=useAppContext()
     
     const [cartArray , setCartArray] = useState([])
-    const [addresses , setAddresses] = useState(dummyAddress)
+    const [addresses , setAddresses] = useState([])
     const [showAddress, setShowAddress] = useState(false)
-    const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0])
+    const [selectedAddress, setSelectedAddress] = useState(null)
     const [paymentOption, setPaymnetOption] = useState("COD")
 
     const getCart = ()=>{
@@ -23,6 +24,23 @@ const Cart = () => {
         setCartArray(tempArray)
     }
 
+    const getUserAddress = async ()=>{
+        try {
+            const {data} = await axios.get("/api/address/get")
+            if(data.success){
+                setAddresses(data.addresses)
+                if(data.addresses.length > 0 ){
+                    setSelectedAddress(data.addresses[0])
+                }
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+
     const placeOrder = async () => {
 
     }
@@ -32,6 +50,12 @@ const Cart = () => {
             getCart()
         }
     },[products , cartItems])
+
+    useEffect(()=>{
+        if(user){
+            getUserAddress()
+        }
+    },[user])
 
     return products.length > 0 && cartItems ? (
         <div className="flex flex-col md:flex-row mt-6">
@@ -50,31 +74,51 @@ const Cart = () => {
 
                 {cartArray.map((product, index) => (
                     <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
+                        
                         <div onClick={()=>{
                             navigate(`/products/${product.category.toLowerCase()}/${product._id}`) ; scrollTo(0,0)
-                        }} className="flex items-center md:gap-6 gap-3">
+                            }} 
+                            
+                            className="flex items-center md:gap-6 gap-3"
+                        >
+                            
                             <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
                                 <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} />
                             </div>
+                            
                             <div>
                                 <p className="hidden md:block font-semibold">{product.name}</p>
                                 <div className="font-normal text-gray-500/70">
                                     <p>Weight: <span>{product.weight || "N/A"}</span></p>
+
                                     <div className='flex items-center'>
+                                        
                                         <p>Qty:</p>
-                                        <select onClick={(e)=>e.stopPropagation()} onChange={e => updateCartItem(product._id , Number(e.target.value))} value={cartItems[product._id]} className='outline-none'>
+
+                                        <select 
+                                        onClick={(e)=>e.stopPropagation()} onChange={e => updateCartItem(product._id , Number(e.target.value))} 
+                                        value={cartItems[product._id]} 
+                                        className='outline-none'
+                                        >
+
                                             {Array(cartItems[product._id] > 9 ? cartItems[product._id] : 9 ).fill('').map((_, index) => (
                                                 <option key={index} value={index + 1}>{index + 1}</option>
                                             ))}
+
                                         </select>
+                                    
                                     </div>
                                 </div>
                             </div>
+
                         </div>
+
                         <p className="text-center">{currency}{product.offerPrice * product.quantity}</p>
+                        
                         <button onClick={()=>removeFromCart(product._id)}  className="cursor-pointer mx-auto">
                             <img src={assets.remove_icon} alt="remove" className="inline-block w-6 h-6" />
                         </button>
+
                     </div>)
                 )}
 
@@ -94,21 +138,26 @@ const Cart = () => {
                     <div className="relative flex justify-between items-start mt-2">
 
                         <p className="text-gray-500">{selectedAddress ? ` ${selectedAddress.street} , ${selectedAddress.city} , ${selectedAddress.state} , ${selectedAddress.country}` : "No address found"}</p>
+                        
                         <button onClick={() => setShowAddress(!showAddress)} className="text-primary hover:underline cursor-pointer">
                             Change
                         </button>
 
                         {showAddress && (
+                            
                             <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
                                 { addresses.map((address , index)=>(
                                     <p onClick={() =>{setSelectedAddress(address) ; setShowAddress(false)}} className="text-gray-500 p-2 hover:bg-gray-100">
                                         {address.street} , {address.city} , {address.state} , {address.country} ,
                                     </p>
                                 ))}
+
                                 <p onClick={() => navigate("/add-address")} className="text-primary text-center cursor-pointer p-2 hover:bg-primary/10">
                                     Add address
                                 </p>
+
                             </div>
+
                         )}
                     </div>
 
