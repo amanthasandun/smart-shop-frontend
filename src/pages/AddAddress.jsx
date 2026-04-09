@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { assets } from "../assets/assets";
+import { useAppContext } from '../context/useAppContext';
+import toast from 'react-hot-toast';
+
 
 // input field component
 const InputField = ({type , placeHolder , name , handleChange , address})=>(
@@ -14,6 +17,7 @@ const InputField = ({type , placeHolder , name , handleChange , address})=>(
 )
 
 const AddAddress = () => {
+    const { axios , user , navigate } = useAppContext()
 
     const [address , setAddress]=useState({
         firstName : "",
@@ -39,7 +43,22 @@ const AddAddress = () => {
 
         const onSubmitHandler = async (e)=>{
             e.preventDefault()
+            try {
+                const {data} = await axios.post('/api/address/add' , {address})
+                if(data.success){
+                    toast.success(data.message)
+                    navigate("/cart")
+                }
+            } catch (error) {
+                toast.error(error.message)
+            }
         }
+
+        useEffect(()=>{
+            if(!user){
+                navigate('/cart')
+            }
+        },[])
 
     return (
         <div className='mt-16 pb-16'>
@@ -72,7 +91,9 @@ const AddAddress = () => {
                             <InputField handleChange={handleChange} address={address} name="country" type="text" placeHolder="Country"/>
                         </div>
                             <InputField handleChange={handleChange} address={address} name="phone" type="text" placeHolder="Phone"/>
-                        <button className='w-full mt-6 bg-primary text-white py-3 hover:bg-primary-dull transition cursor-pointer uppercase'>
+                        <button 
+                        type='submit'
+                        className='w-full mt-6 bg-primary text-white py-3 hover:bg-primary-dull transition cursor-pointer uppercase'>
                             Save the address
                         </button>                            
                     </form>

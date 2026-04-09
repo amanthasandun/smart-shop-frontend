@@ -140,7 +140,7 @@ export const AppContextProvider = ({ children }) => {
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }, [cartItems]);
 
-    // Sync cart with backend
+    // Update database cart items
     useEffect(() => {
         const updateCart = async () => {
             try {
@@ -180,6 +180,7 @@ export const AppContextProvider = ({ children }) => {
         getCartAmount,
         getCartCount,
         axios,
+        setCartItems , 
     };
 
     return (

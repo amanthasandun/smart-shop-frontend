@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../../context/useAppContext'
-import { assets, dummyOrders } from '../../assets/assets'
+import { assets } from '../../assets/assets'
+import toast from 'react-hot-toast'
 
 const Orders = () => {
 
-    const {currency} = useAppContext()
+    const {currency , axios} = useAppContext()
     const [orders , setOrders] = useState([])
 
     const fetchOrders = async ()=>{
-      setOrders(dummyOrders)
+    //   setOrders(dummyOrders)
+        try {
+            const {data} = await axios.get("/api/order/seller/")
+            if(data.success){
+                setOrders(data.orders)
+            }else{
+                console.log(data.message);
+                
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     useEffect(()=>{
@@ -27,6 +40,7 @@ const Orders = () => {
                     <img className="h-12 w-12 shrink-0 object-cover" src={assets.box_icon} alt="boxIcon" />
                     <div className="space-y-1">
                         {order.items.map((item, index) => (
+                            
                             <div key={index} className="flex flex-col">
                                 <p className="font-medium leading-snug">
                                     {item.product.name} <span className="text-primary">x {item.quantity}</span>
@@ -35,12 +49,19 @@ const Orders = () => {
                         ))}
                     </div>
                 </div>
-
+                
                 <div className="text-sm text-gray-700">
-                    <p className='text-black/80'>{order.address.firstName} {order.address.lastName}</p>
-                    <p>{order.address.street}, {order.address.city}</p><p> {order.address.state},{order.address.zipcode}, {order.address.country}</p>
-                    <p>{order.address.phone}</p>
+                    {order.address ? (
+                        <>
+                            <p className='text-black/80'>{order.address.firstName || "no name"} {order.address.lastName || ""}</p>
+                            <p>{order.address?.street}, {order.address.city}</p><p> {order.address?.state},{order.address.zipcode}, {order.address.country}</p>
+                            <p>{order.address?.phone}</p>
+                        </>
+                    ) : (
+                        <p className='font-medium text-amber-700'>Address not available</p>
+                    )}
                 </div>
+                
 
                 <p className="text-lg font-semibold md:text-right">{currency}{order.amount}</p>
 
